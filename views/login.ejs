@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles.css">
+    <title>HHUB - Reserva de Quartos</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <section class="login">
+        <div class="content lg-bg-color"> 
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Senha" required>
+                <button type="submit" onclick="window.location.href='/index';">Entrar</button>
+            </form>
+            <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

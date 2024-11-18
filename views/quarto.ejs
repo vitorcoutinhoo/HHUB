@@ -7,7 +7,22 @@
     <title>HHUB - Reserva de Quartos</title>
 </head>
 <body>
-    <h1>Em construção !</h1>
-    <a href="/">Voltar</a>
+    <div class="wrapper">
+        <%- include('partials/header') %>
+
+        <div class="container room-container">
+            <div class="room-details">
+                <img src="/images/quartohotel.jpg" alt="Imagem do Quarto" class="room-image">
+                <div class="room-description">
+                    <h2>Quarto Standart</h2>
+                    <p>Descrição detalhada do quarto, incluindo comodidades e informações importantes.</p>
+                    <p>Preço por noite: <strong>R$ 200,00</strong></p>
+                    <button class="book-room">Reservar Quarto</button>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+    </div>
 </body>
 </html>

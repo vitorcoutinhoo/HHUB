@@ -7,43 +7,46 @@
     <title>HHUB - Reserva de Quartos</title>
 </head>
 <body>
+    <div class="wrapper">
+        <div class="home">
+            <%- include('partials/header') %>
+
+            <section class="banner">
+                <img src="images/banner.jpg" alt="Banner">
+                <div class="banner-text">
+                    <h1>Reserve seu quarto agora!</h1>
+                    <p>Reserve seu quarto com antecedência <br> nos melhores locais com os melhores preços!</p>
+                    <button onclick="window.location.href='/reservas';">Reservar agora</button>
+                </div> 
+            </section>
     
-    <%- include('partials/header') %>
-
-    <section class="banner">
-        <img src="images/banner.jpg" alt="Banner">
-        <div class="banner-text">
-            <h1>Reserve seu quarto agora!</h1>
-            <p>Reserve seu quarto com antecedência <br> nos melhores locais com os melhores preços!</p>
-            <button onclick="window.location.href='/reservas';">Reservar agora</button>
-        </div> 
-    </section>
-
-    <section class="promoções">
-        <h2 id="promo">Promoções</h2>
-        <div class="cards">
-            <div class="card">
-                <img src="images/quartohotel.jpg" alt="Quarto 1">
-                <h4>Quarto Standard</h4>
-                <p>A partir de R$ 200/noite</p>
-                <button onclick="window.location.href='/quarto';">Ver Mais</button>
-            </div>
-            <div class="card">
-                <img src="images/quartohotel.jpg" alt="Quarto 2">
-                <h4>Quarto Standard</h4>
-                <p>A partir de R$ 200/noite</p>
-                <button onclick="window.location.href='/quarto';">Ver Mais</button>
-            </div>
-            <div class="card">
-                <img src="images/quartohotel.jpg" alt="Quarto 3">
-                <h4>Quarto Standard</h4>
-                <p>A partir de R$ 200/noite</p>
-                <button onclick="window.location.href='/quarto';">Ver Mais</button>
-            </div>
+            <section class="promoções">
+                <h2 id="promo">Promoções</h2>
+                <div class="cards">
+                    <div class="card">
+                        <img src="images/quartohotel.jpg" alt="Quarto 1">
+                        <h4>Quarto Standard</h4>
+                        <p>A partir de R$ 200/noite</p>
+                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
+                    </div>
+                    <div class="card">
+                        <img src="images/quartohotel.jpg" alt="Quarto 2">
+                        <h4>Quarto Standard</h4>
+                        <p>A partir de R$ 200/noite</p>
+                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
+                    </div>
+                    <div class="card">
+                        <img src="images/quartohotel.jpg" alt="Quarto 3">
+                        <h4>Quarto Standard</h4>
+                        <p>A partir de R$ 200/noite</p>
+                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
+                    </div>
+                </div>
+                <button onclick="window.location.href='/reservas';">Ver todas as reservas!</button>
+            </section>
+    
+            <%- include('partials/footer') %>
         </div>
-        <button onclick="window.location.href='/reservas';">Ver todas as reservas!</button>
-    </section>
-
-    <%- include('partials/footer') %>
+    </div>
 </body>
 </html>

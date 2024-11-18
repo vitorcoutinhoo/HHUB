@@ -11,15 +11,28 @@ html {
 }
 
 body {
+    height: 100%;
     font-family: 'Lato', sans-serif;
     background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.home {
+    flex: 1;
 }
 
 .header {
     position: fixed;
     width: calc(100% - 60px);
     height: 120px; 
-    background-color: #00457c; 
+    background-color: #247bc2; 
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -29,22 +42,21 @@ body {
 }
 
 .logo {
-    width: 33%;
-    font-size: 40px;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
+    width: 20%;
+    height: 250px;
+    flex: 1;
 }
 
 .links, .user {
-    width: 33%;
+    width: 40%;
     font-size: 20px;
     display: flex;
     gap: 20px;
+    flex: 2;
 }
 
 .links {
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .user {
@@ -125,6 +137,7 @@ body {
 .reservas {
     margin-top: 0;
     padding-top: 150px;
+    flex: 1;
 }
 
 .promoções h2, .reservas h2 {
@@ -182,7 +195,7 @@ body {
     transition: background-color 0.3s ease; 
 }
 
-.promoções button, .reservas button, .login button {
+.promoções button, .reservas button, .login button, .book-room {
     margin-top: 30px;
     padding: 12px 30px;
     background-color: #ffa500; 
@@ -194,16 +207,18 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.promoções button:hover, .reservas button:hover, .login button:hover {
+.promoções button:hover, .reservas button:hover, .login button:hover, .book-room:hover {
     background-color: #cc8400; 
 }
 
 .footer {
-    background-color: #00457c;
+    background-color: #247bc2;
     color: #fff;
     text-align: center;
     padding: 15px 0;
     margin-top: 20px;
+    bottom: 0;
+    position: relative;
 }
 
 .footer-text {
@@ -237,8 +252,9 @@ body {
 }
 
 .sobre {
-    height: calc(100vh - 295px);
+    flex: 1;
     padding-top: 180px;
+    margin-bottom: 30px;
 }
 
 .content {
@@ -276,48 +292,167 @@ body {
     color: #333;
 }
 
+.login-content {
+    flex: 1;
+}
+
 .login {
     margin-left: auto;
     margin-right: auto;
-    height: calc(100vh - 397px);
     padding: 40px;
     padding-top: 200px;
     max-width: 400px;
     width: 100%;
     text-align: center;
-  }
+}
   
-  .login h2 {
+.login h2 {
     margin-bottom: 20px;
     font-size: 30px;
     color: #333;
-  }
-  
-  .login form {
+}
+
+.login form {
     display: flex;
     flex-direction: column;
-  }
-  
-  .login input[type="email"],
-  .login input[type="password"] {
+}
+
+.login input[type="email"],
+.login input[type="password"] {
     margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     outline: none;
-  }
-  
-  .login input::placeholder {
-    color: #999;
-  }
+}
 
-  .login p {
+.login input::placeholder {
+    color: #999;
+}
+
+.login p {
     margin-top: 15px;
     font-size: 14px;
     color: #666;
-  }
+}
 
-  .lg-bg-color {
+.lg-bg-color {
     background-color: #fff;
-  }
+}
+
+.cart-container {
+    padding-top: 150px;
+    margin: auto auto;
+    width: 50%;
+    flex: 1;
+}
+
+.cart-container h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.cart-container h2, .room-description h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.cart-item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.cart-item-price {
+    color: #888;
+    margin: 5px 0;
+}
+
+.cart-item-quantity {
+    width: 50px;
+    margin: 5px 0;
+}
+
+.remove-item {
+    margin-left: auto;
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.checkout-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.room-container {
+    padding-top: 150px;
+    margin: auto auto;
+    width: 80%;
+    flex: 1;
+}
+
+.room-details {
+    padding: 40px;
+    display: flex;
+    gap: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.room-image {
+    width: 600px;
+    height: 330px;
+    object-fit: cover;
+}
+
+.room-description {
+    flex: 1;
+    padding: 20px;
+}
+
+.room-description p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}

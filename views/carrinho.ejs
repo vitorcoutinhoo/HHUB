@@ -7,7 +7,43 @@
     <title>HHUB - Reserva de Quartos</title>
 </head>
 <body>
-    <h1>Em construção !</h1>
-    <a href="/">Voltar</a>
+    <div class="wrapper">
+        <%- include('partials/header') %>
+
+        <div class="cart-container">
+            <h1>Meu Carrinho</h1>
+            <div class="cart-items">
+                <!-- Exemplo de item no carrinho -->
+                <div class="cart-item">
+                    <img src="/images/quartohotel.jpg" alt="Nome do Produto" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <h2 class="cart-item-title">Quarto Standart</h2>
+                        <p class="cart-item-price">Preço: R$ 400,00</p>
+                        <label>Quantidade de dias:</label>
+                        <input type="number" value="2" min="1" class="cart-item-quantity">
+                    </div>
+                    <button class="remove-item">Remover</button>
+                </div>
+
+                <div class="cart-item">
+                    <img src="/images/quartohotel.jpg" alt="Nome do Produto" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <h2 class="cart-item-title">Quarto Standart</h2>
+                        <p class="cart-item-price">Preço: R$ 400,00</p>
+                        <label>Quantidade de dias:</label>
+                        <input type="number" value="2" min="1" class="cart-item-quantity">
+                    </div>
+                    <button class="remove-item">Remover</button>
+                </div>
+                
+            </div>
+            <div class="cart-summary">
+                <h2>Total: R$ 800,00</h2>
+                <button class="checkout-button">Finalizar Compra</button>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+    </div>
 </body>
 </html>

@@ -7,7 +7,30 @@
     <title>HHUB - Reserva de Quartos</title>
 </head>
 <body>
-    <h1>Em construção !</h1>
-    <a href="/">Voltar</a>
+    <div class="wrapper">
+        <%- include('partials/header') %>
+
+        <div class="container form-container">
+            <form action="/cadastro" method="POST" class="form">
+                <h1>Cadastro</h1>
+                
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="confirm-password">Confirme a Senha:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+
+                <button type="submit" class="submit-button">Cadastrar</button>
+            </form>
+        </div>
+
+        <%- include('partials/footer') %>
+    </div>
 </body>
 </html>

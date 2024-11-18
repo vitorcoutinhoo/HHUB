@@ -35,6 +35,10 @@ app.get('/quarto', (req, res) => {
     res.render('quarto');
 });
 
+app.get('/admin', (req, res) => {
+    res.render('admin');
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });

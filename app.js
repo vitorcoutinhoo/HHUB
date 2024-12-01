@@ -82,27 +82,33 @@ app.get('/cadastro', (req, res) => {
     res.render('cadastro');
 });
 
+// Rota para processar o cadastro do usuário
+// Rota para processar o cadastro do usuário
 app.post('/cadastro', (req, res) => {
-    const { user_name, nome_completo, cpf, idade, senha, email, telefone } = req.body;
+    const { email, password, name } = req.body;
 
-    // Verificar se o usuário já existe
+    // Verificar se o e-mail já existe no banco de dados
     const checkQuery = 'SELECT * FROM CLIENTE WHERE email = ?';
     db.query(checkQuery, [email], (err, results) => {
         if (err) {
-            console.log('Erro na consulta:', err);
+            console.log('Erro ao verificar e-mail:', err);
             return res.send('Erro ao acessar o banco de dados');
         }
+
+        // Se o e-mail já existe
         if (results.length > 0) {
-            return res.send('Usuário já cadastrado');
+            return res.render('cadastro', { errorMessage: 'E-mail já cadastrado' });
         }
 
-        // Inserir o novo usuário no banco de dados
-        const insertQuery = 'INSERT INTO CLIENTE (user_name, nome_completo, cpf, idade, senha, email, telefone) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        db.query(insertQuery, [user_name, nome_completo, cpf, idade, senha, email, telefone], (err, results) => {
+        // Inserir o novo usuário no banco de dados (não inclui 'id_cliente' na consulta)
+        const insertQuery = 'INSERT INTO CLIENTE (email, senha, user_name) VALUES (?, ?, ?)';
+        db.query(insertQuery, [email, password, name], (err, result) => {
             if (err) {
-                console.log('Erro ao cadastrar:', err);
-                return res.send('Erro ao cadastrar o usuário');
+                console.log('Erro ao cadastrar usuário:', err);
+                return res.send('Erro ao cadastrar usuário');
             }
+
+            // Redireciona para a página de login após o cadastro
             res.redirect('/login');
         });
     });

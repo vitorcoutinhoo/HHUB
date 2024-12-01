@@ -14,9 +14,9 @@
             <div class="room-details">
                 <img src="/images/quartohotel.jpg" alt="Imagem do Quarto" class="room-image">
                 <div class="room-description">
-                    <h2>Quarto Standart</h2>
-                    <p>Descrição detalhada do quarto, incluindo comodidades e informações importantes.</p>
-                    <p>Preço por noite: <strong>R$ 200,00</strong></p>
+                    <h2><%= quarto.nome_quarto %></h2> <!-- Nome do quarto -->
+                    <p><%= quarto.descricao %></p> <!-- Descrição do quarto -->
+                    <p>Preço por noite: <strong>R$ <%= quarto.preco %></strong></p> <!-- Preço -->
                     <button class="book-room">Reservar Quarto</button>
                 </div>
             </div>

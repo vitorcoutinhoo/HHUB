@@ -138,6 +138,25 @@ app.get('/carrinho', (req, res) => {
     res.render('carrinho', { isLoggedIn });
 });
 
+// Rota para o quarto
+app.get('/quarto', (req, res) => {
+    const isLoggedIn = req.session.userId ? true : false;
+
+    // Consulta para pegar os dados do quarto, como o preço e descrição
+    const query = 'SELECT * FROM QUARTO WHERE id_quarto = 1'; // Supondo que o quarto com id 1 exista
+    db.query(query, (err, results) => {
+        if (err) {
+            console.log('Erro ao consultar quarto:', err);
+            return res.send('Erro ao acessar o banco de dados');
+        }
+        if (results.length > 0) {
+            res.render('quarto', { isLoggedIn, quarto: results[0] });
+        } else {
+            res.send('Quarto não encontrado');
+        }
+    });
+});
+
 // Rota para admin (exemplo de outra página)
 app.get('/admin', (req, res) => {
     res.render('admin');
@@ -147,6 +166,14 @@ app.get('/admin', (req, res) => {
 app.get('/#promo', (req, res) => {
     res.render('promo');
 });
+
+app.get('/sobre', (req, res) => {
+    // Verificar se o usuário está logado
+    const isLoggedIn = req.session && req.session.user ? true : false;
+    // Renderizar a página "sobre", passando a variável isLoggedIn
+    res.render('sobre', { isLoggedIn: isLoggedIn });
+});
+
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);

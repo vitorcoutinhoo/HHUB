@@ -148,9 +148,11 @@ app.get('/carrinho', (req, res) => {
 app.get('/quarto', (req, res) => {
     const isLoggedIn = req.session.userId ? true : false;
 
-    // Consulta para pegar os dados do quarto, como o preço e descrição
-    const query = 'SELECT * FROM QUARTO WHERE id_quarto = 1'; // Supondo que o quarto com id 1 exista
-    db.query(query, (err, results) => {
+    // Consulta incluindo a coluna 'descricao'
+    const query = 'SELECT numeroQuarto, tipoQuarto, statusQuarto, valor_quarto, descricao FROM QUARTO WHERE id_quarto = ?';
+    const idQuarto = 6; // no bd, quarto começa com id 6
+
+    db.query(query, [idQuarto], (err, results) => {
         if (err) {
             console.log('Erro ao consultar quarto:', err);
             return res.send('Erro ao acessar o banco de dados');
@@ -162,6 +164,7 @@ app.get('/quarto', (req, res) => {
         }
     });
 });
+
 
 // Rota para admin (exemplo de outra página)
 app.get('/admin', (req, res) => {

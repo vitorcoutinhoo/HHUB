@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
-    <title>HHUB - Reserva de Quartos</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <title>HHUB - Meu Carrinho</title>
 </head>
 <body>
     <div class="wrapper">
@@ -12,38 +12,86 @@
 
         <div class="cart-container">
             <h1>Meu Carrinho</h1>
-            <div class="cart-items">
-                <!-- Exemplo de item no carrinho -->
-                <div class="cart-item">
-                    <img src="/images/quartohotel.jpg" alt="Nome do Produto" class="cart-item-image">
-                    <div class="cart-item-details">
-                        <h2 class="cart-item-title">Quarto Standart</h2>
-                        <p class="cart-item-price">Preço: R$ 400,00</p>
-                        <label>Quantidade de dias:</label>
-                        <input type="number" value="2" min="1" class="cart-item-quantity">
-                    </div>
-                    <button class="remove-item">Remover</button>
-                </div>
 
-                <div class="cart-item">
-                    <img src="/images/quartohotel.jpg" alt="Nome do Produto" class="cart-item-image">
-                    <div class="cart-item-details">
-                        <h2 class="cart-item-title">Quarto Standart</h2>
-                        <p class="cart-item-price">Preço: R$ 400,00</p>
-                        <label>Quantidade de dias:</label>
-                        <input type="number" value="2" min="1" class="cart-item-quantity">
-                    </div>
-                    <button class="remove-item">Remover</button>
-                </div>
-                
+            <div class="cart-items">
+                <% if (carrinho.length > 0) { %>
+                    <% carrinho.forEach((item, index) => { %>
+                        <div class="cart-item">
+                            <img src="/images/quartohotel.jpg" alt="<%= item.tipoQuarto %>" class="cart-item-image">
+                            <div class="cart-item-details">
+                                <h2 class="cart-item-title"><%= item.tipoQuarto %></h2>
+                                <p class="cart-item-price">Preço por noite: R$ <%= item.valor_quarto %></p>
+                                <label for="quantity-<%= item.idQuarto %>">Quantidade de dias:</label>
+                                <input 
+                                    type="number" 
+                                    value="1" 
+                                    min="1" 
+                                    id="quantity-<%= item.idQuarto %>" 
+                                    class="cart-item-quantity" 
+                                    data-id="<%= item.idQuarto %>">
+                            </div>
+                            <button class="remove-item" data-index="<%= index %>">Remover</button>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>Seu carrinho está vazio. Adicione alguns quartos!</p>
+                <% } %>
             </div>
+
             <div class="cart-summary">
-                <h2>Total: R$ 800,00</h2>
+                <h2>Total: R$ <span id="cart-total">0,00</span></h2>
                 <button class="checkout-button">Finalizar Compra</button>
             </div>
         </div>
 
         <%- include('partials/footer') %>
     </div>
+
+    <script>
+        // Calcula o total do carrinho dinamicamente
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseFloat(item.querySelector('.cart-item-price').innerText.replace('Preço por noite: R$ ', '').replace(',', '.'));
+                const days = parseInt(item.querySelector('.cart-item-quantity').value);
+                total += price * days;
+            });
+            document.getElementById('cart-total').innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        // Atualiza o total sempre que a quantidade é alterada
+        document.querySelectorAll('.cart-item-quantity').forEach(input => {
+            input.addEventListener('change', calculateTotal);
+        });
+
+        // Remove um item do carrinho
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', async function () {
+                const index = this.dataset.index; // Obtém o índice do item
+                try {
+                    const response = await fetch(`/carrinho/${index}`, { // Envia o índice para o servidor
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        alert('Item removido com sucesso!');
+                        this.closest('.cart-item').remove(); // Remove o item do front-end
+                        if (document.querySelectorAll('.cart-item').length === 0) {
+                            document.querySelector('.cart-items').innerHTML = '<p>Seu carrinho está vazio. Adicione alguns quartos!</p>';
+                        }
+                        calculateTotal(); // Atualiza o total do carrinho
+                    } else {
+                        alert('Erro ao remover o item do carrinho.');
+                    }
+                } catch (err) {
+                    console.error('Erro ao remover item:', err);
+                    alert('Erro ao remover item do carrinho.');
+                }
+            });
+        });
+
+        // Calcula o total ao carregar a página
+        calculateTotal();
+    </script>
 </body>
 </html>

@@ -13,54 +13,18 @@
         <section class="reservas">
             <h2 id="reserva">Reserve agora o seu quarto!</h2>
             <div class="cards">
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 1">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 2">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 3">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 1">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 2">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 3">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 2">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
-                <div class="card">
-                    <img src="images/quartohotel.jpg" alt="Quarto 3">
-                    <h4>Quarto Standard</h4>
-                    <p>A partir de R$ 200/noite</p>
-                    <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                </div>
+                <% if (reservas.length > 0) { %>
+                    <% reservas.forEach(reserva => { %>
+                        <div class="card">
+                            <img src="images/quartohotel.jpg" alt="Quarto">
+                            <h4><%= reserva.tipoQuarto %></h4>
+                            <p>A partir de R$ <%= reserva.valor_quarto %>/noite</p>
+                            <button onclick="window.location.href='/quarto/<%= reserva.id_quarto %>';">Ver Mais</button>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>Nenhum quarto disponível no momento.</p>
+                <% } %>
             </div>
         </section>
 

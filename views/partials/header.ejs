@@ -1,13 +1,22 @@
 <header class="header">
+    <!-- Logo da página -->
     <img src="/images/logo.png" alt="HHUB" class="logo">
+    
+    <!-- Navegação principal -->
     <nav class="links">
         <a href="/">Home</a>
         <a href="/reservas">Reservas</a>
         <a href="/#promo">Promoções</a>
         <a href="/sobre">Sobre</a>
     </nav>
+    
+    <!-- Navegação de usuário -->
     <nav class="user">
         <a href="/carrinho">Carrinho</a>
-        <a href="/login">Logar</a>
-    </nav>
+        <% if (typeof isLoggedIn === 'undefined' || !isLoggedIn) { %>
+            <a href="/login">Logar</a>
+        <% } else { %>
+            <a href="/logout">Sair</a>
+        <% } %>
+    </nav>    
 </header>

@@ -23,24 +23,18 @@
             <section class="promoções">
                 <h2 id="promo">Promoções</h2>
                 <div class="cards">
-                    <div class="card">
-                        <img src="images/quartohotel.jpg" alt="Quarto 1">
-                        <h4>Quarto Standard</h4>
-                        <p>A partir de R$ 200/noite</p>
-                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                    </div>
-                    <div class="card">
-                        <img src="images/quartohotel.jpg" alt="Quarto 2">
-                        <h4>Quarto Standard</h4>
-                        <p>A partir de R$ 200/noite</p>
-                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                    </div>
-                    <div class="card">
-                        <img src="images/quartohotel.jpg" alt="Quarto 3">
-                        <h4>Quarto Standard</h4>
-                        <p>A partir de R$ 200/noite</p>
-                        <button onclick="window.location.href='/quarto';">Ver Mais</button>
-                    </div>
+                    <% if (quartos.length > 0) { %>
+                        <% quartos.forEach(quarto => { %>
+                            <div class="card">
+                                <img src="images/quartohotel.jpg" alt="Quarto">
+                                <h4><%= quarto.tipoQuarto %></h4>
+                                <p>A partir de R$ <%= quarto.valor_quarto %>/noite</p>
+                                <button onclick="window.location.href='/quarto/<%= quarto.id_quarto %>';">Ver Mais</button>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>Nenhum quarto disponível no momento.</p>
+                    <% } %>
                 </div>
                 <button onclick="window.location.href='/reservas';">Ver todas as reservas!</button>
             </section>

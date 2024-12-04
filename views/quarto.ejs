@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="/assets/styles.css">
     <title>HHUB - Reserva de Quartos</title>
 </head>
 <body>
@@ -14,15 +14,49 @@
             <div class="room-details">
                 <img src="/images/quartohotel.jpg" alt="Imagem do Quarto" class="room-image">
                 <div class="room-description">
-                    <h2>Quarto Standart</h2>
-                    <p>Descrição detalhada do quarto, incluindo comodidades e informações importantes.</p>
-                    <p>Preço por noite: <strong>R$ 200,00</strong></p>
-                    <button class="book-room">Reservar Quarto</button>
+                    <h2><%= quarto.tipoQuarto %></h2> 
+                    <p><%= quarto.descricao %></p> 
+                    <p>Preço por noite: <strong>R$ <%= quarto.valor_quarto %></strong></p>
+                    <br>
+                    <p><strong><%= quarto.nome_hotel %></strong>, <%= quarto.endereco_hotel %> <br> <%= quarto.cidade_hotel %> - <%= quarto.estado_hotel %></p>
+                    <button class="book-room" data-type="<%=quarto.tipoQuarto%>" data-value="<%=quarto.valor_quarto%>">Adicionar ao Carrinho</button>
                 </div>
             </div>
         </div>
 
         <%- include('partials/footer') %>
     </div>
+
+    <script>
+        // Captura o evento de clique no botão "Adicionar ao Carrinho"
+        document.querySelector('.book-room').addEventListener('click', async function () {
+            // Extrai os dados do quarto a partir dos atributos data-*
+            const tipoQuarto = this.dataset.type;
+            const valor_quarto = this.dataset.value;
+
+            try {
+                // Faz uma requisição POST para o backend com os dados do quarto
+                const response = await fetch('/carrinho', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tipoQuarto,
+                        valor_quarto,
+                    }),
+                });
+
+                if (response.ok) {
+                    alert('Quarto adicionado ao carrinho com sucesso!');
+                } else {
+                    alert('Falha ao adicionar o quarto ao carrinho.');
+                }
+            } catch (err) {
+                console.error('Erro ao adicionar ao carrinho:', err);
+                alert('Erro ao adicionar o quarto ao carrinho.');
+            }
+        });
+    </script>
 </body>
 </html>

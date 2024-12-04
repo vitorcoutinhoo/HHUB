@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles.css">
-    <title>HHUB - Reserva de Quartos</title>
+    <title>HHUB - Administração</title>
 </head>
 <body>
     <div class="wrapper">
         <a href="/" class="back-link">Voltar para a Página Inicial</a>
         <div class="display">
+
+            <!-- Tabela de Quartos -->
             <div class="table-container-1">
                 <table class="hotel-table">
-                    <div class="hd">
-                        <h1>Quartos de Hotel</h1>
-                        <button class="btn-add">Adicionar</button>
-                    </div>
+                    <caption>
+                        <div class="hd">
+                            <h1>Quartos de Hotel</h1>
+                            <button class="btn-add">Adicionar</button>
+                        </div>
+                    </caption>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -26,25 +30,31 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% quartos.forEach((quarto) => { %>
                         <tr>
-                            <td>1</td>
-                            <td>Quarto Standart</td>
-                            <td>403</td>
-                            <td>R$ 200,00</td>
+                            <td><%= quarto.id %></td>
+                            <td><%= quarto.nome %></td>
+                            <td><%= quarto.numero %></td>
+                            <td>R$ <%= quarto.preco %></td>
                             <td>
-                                <button class="btn-update">Atualizar</button>
-                                <button class="btn-remove">Remover</button>
+                                <button class="btn-update" onclick="atualizarQuarto('<%= quarto.id %>')">Atualizar</button>
+                                <button class="btn-remove" onclick="removerQuarto('<%= quarto.id %>')">Remover</button>
                             </td>
                         </tr>
+                        <% }) %>
                     </tbody>
                 </table>
             </div>
+
+            <!-- Tabela de Reservas -->
             <div class="table-container-2">
                 <table class="reservations-table">
-                    <div class="hd">
-                        <h1>Reservas</h1>
-                        <button class="btn-add">Adicionar</button>
-                    </div>
+                    <caption>
+                        <div class="hd">
+                            <h1>Reservas</h1>
+                            <button class="btn-add">Adicionar</button>
+                        </div>
+                    </caption>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -55,20 +65,41 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% reservas.forEach((reserva) => { %>
                         <tr>
-                            <td>1</td>
-                            <td>João Silva</td>
-                            <td>20/12/2024</td>
-                            <td>403</td>
+                            <td><%= reserva.id %></td>
+                            <td><%= reserva.cliente %></td>
+                            <td><%= reserva.data %></td>
+                            <td><%= reserva.numeroQuarto %></td>
                             <td>
-                                <button class="btn-update">Atualizar</button>
-                                <button class="btn-remove">Remover</button>
+                                <button class="btn-update" onclick="atualizarReserva('<%= reserva.id %>')">Atualizar</button>
+                                <button class="btn-remove" onclick="removerReserva('<%= reserva.id %>')">Remover</button>
                             </td>
                         </tr>
+                        <% }) %>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <script>
+        // Funções de exemplo para botões (poderão ser ajustadas para uso real)
+        function atualizarQuarto(id) {
+            alert(`Atualizar quarto com ID: ${id}`);
+        }
+
+        function removerQuarto(id) {
+            alert(`Remover quarto com ID: ${id}`);
+        }
+
+        function atualizarReserva(id) {
+            alert(`Atualizar reserva com ID: ${id}`);
+        }
+
+        function removerReserva(id) {
+            alert(`Remover reserva com ID: ${id}`);
+        }
+    </script>
 </body>
 </html>

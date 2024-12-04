@@ -16,9 +16,12 @@
                 <form action="/login" method="POST">
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Senha" required>
-                    <button type="submit" onclick="window.location.href='/index';">Entrar</button>
+                    <button type="submit">Entrar</button>
                 </form>
                 <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="error-message"><%= error %></div>
+                <% } %>
             </div>
         </section>
 

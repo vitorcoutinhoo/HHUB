@@ -26,19 +26,21 @@
                             <th>Nome do Quarto</th>
                             <th>Nº Quarto</th>
                             <th>Preço</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% quartos.forEach((quarto) => { %>
+                        <% quartos.forEach(quarto => { %>
                         <tr>
-                            <td><%= quarto.id %></td>
-                            <td><%= quarto.nome %></td>
-                            <td><%= quarto.numero %></td>
-                            <td>R$ <%= quarto.preco %></td>
+                            <td><%= quarto.id_quarto %></td>
+                            <td><%= quarto.tipoQuarto %></td>
+                            <td><%= quarto.numeroQuarto %></td>
+                            <td>R$ <%= quarto.valor_quarto %></td>
+                            <td><%= quarto.statusQuarto %></td>
                             <td>
-                                <button class="btn-update" onclick="atualizarQuarto('<%= quarto.id %>')">Atualizar</button>
-                                <button class="btn-remove" onclick="removerQuarto('<%= quarto.id %>')">Remover</button>
+                                <button class="btn-update">Atualizar</button>
+                                <button class="btn-remove">Remover</button>
                             </td>
                         </tr>
                         <% }) %>
@@ -59,47 +61,30 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome do Cliente</th>
-                            <th>Data da Reserva</th>
+                            <th>CheckOUT</th>
                             <th>Nº Quarto</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% reservas.forEach((reserva) => { %>
+                        <% reservas.forEach(reserva => { %>
                         <tr>
-                            <td><%= reserva.id %></td>
-                            <td><%= reserva.cliente %></td>
-                            <td><%= reserva.data %></td>
+                            <td><%= reserva.id_reserva %></td>
+                            <td><%= reserva.nome_completo %></td>
+                            <td><%= reserva.dataCheckOut.toISOString().slice(0, 10) %></td>
                             <td><%= reserva.numeroQuarto %></td>
+                            <td><%= reserva.statusReserva %></td>
                             <td>
-                                <button class="btn-update" onclick="atualizarReserva('<%= reserva.id %>')">Atualizar</button>
-                                <button class="btn-remove" onclick="removerReserva('<%= reserva.id %>')">Remover</button>
+                                <button class="btn-update">Atualizar</button>
+                                <button class="btn-remove">Remover</button>
                             </td>
                         </tr>
                         <% }) %>
                     </tbody>
                 </table>
-            </div>
+            </div> 
         </div>
     </div>
-
-    <script>
-        // Funções de exemplo para botões (poderão ser ajustadas para uso real)
-        function atualizarQuarto(id) {
-            alert(`Atualizar quarto com ID: ${id}`);
-        }
-
-        function removerQuarto(id) {
-            alert(`Remover quarto com ID: ${id}`);
-        }
-
-        function atualizarReserva(id) {
-            alert(`Atualizar reserva com ID: ${id}`);
-        }
-
-        function removerReserva(id) {
-            alert(`Remover reserva com ID: ${id}`);
-        }
-    </script>
 </body>
 </html>

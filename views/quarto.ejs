@@ -19,7 +19,7 @@
                     <p>Preço por noite: <strong>R$ <%= quarto.valor_quarto %></strong></p>
                     <br>
                     <p><strong><%= quarto.nome_hotel %></strong>, <%= quarto.endereco_hotel %> <br> <%= quarto.cidade_hotel %> - <%= quarto.estado_hotel %></p>
-                    <button class="book-room" data-type="<%=quarto.tipoQuarto%>" data-value="<%=quarto.valor_quarto%>">Adicionar ao Carrinho</button>
+                    <button class="book-room" data-id="<%= quarto.id_quarto %>" data-type="<%=quarto.tipoQuarto%>" data-value="<%=quarto.valor_quarto%>" data-hotel="<%= quarto.id_hotel %>">Adicionar ao Carrinho</button>
                 </div>
             </div>
         </div>
@@ -31,8 +31,10 @@
         // Captura o evento de clique no botão "Adicionar ao Carrinho"
         document.querySelector('.book-room').addEventListener('click', async function () {
             // Extrai os dados do quarto a partir dos atributos data-*
+            const idQuarto = this.dataset.id;
             const tipoQuarto = this.dataset.type;
             const valor_quarto = this.dataset.value;
+            const idHotel = this.dataset.hotel;
 
             try {
                 // Faz uma requisição POST para o backend com os dados do quarto
@@ -42,8 +44,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        idQuarto,
                         tipoQuarto,
                         valor_quarto,
+                        idHotel,
                     }),
                 });
 

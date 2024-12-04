@@ -15,7 +15,7 @@
 
             <div class="cart-items">
                 <% if (carrinho.length > 0) { %>
-                    <% carrinho.forEach((item, index) => { %>
+                    <% carrinho.forEach(item => { %>
                         <div class="cart-item">
                             <img src="/images/quartohotel.jpg" alt="<%= item.tipoQuarto %>" class="cart-item-image">
                             <div class="cart-item-details">
@@ -30,7 +30,7 @@
                                     class="cart-item-quantity" 
                                     data-id="<%= item.idQuarto %>">
                             </div>
-                            <button class="remove-item" data-index="<%= index %>">Remover</button>
+                            <button class="remove-item" data-id="<%= item.idQuarto %>">Remover</button>
                         </div>
                     <% }); %>
                 <% } else { %>
@@ -67,9 +67,10 @@
         // Remove um item do carrinho
         document.querySelectorAll('.remove-item').forEach(button => {
             button.addEventListener('click', async function () {
-                const index = this.dataset.index; // Obtém o índice do item
+                const id = this.dataset.id; // Obtém o índice do item
+
                 try {
-                    const response = await fetch(`/carrinho/${index}`, { // Envia o índice para o servidor
+                    const response = await fetch(`/carrinho/${id}`, { 
                         method: 'DELETE',
                     });
 
@@ -88,6 +89,45 @@
                     alert('Erro ao remover item do carrinho.');
                 }
             });
+        });
+
+        // Finaliza a compra e envia os dados do carrinho para o backend
+        document.querySelector('.checkout-button').addEventListener('click', async function () {
+            // Captura os itens do carrinho diretamente do DOM
+            const cartItems = [];
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const idQuarto = item.querySelector('.cart-item-quantity').dataset.id; // Pega o ID do quarto
+                const days = parseInt(item.querySelector('.cart-item-quantity').value); // Pega a quantidade de dias
+                const valor_quarto = parseFloat(item.querySelector('.cart-item-price').innerText.replace('Preço por noite: R$ ', '').replace(',', '.')); // Pega o valor do quarto
+
+                cartItems.push({ idQuarto, days, valor_quarto });
+            });
+
+            if (cartItems.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            try {
+                // Faz o envio dos dados para o backend
+                const response = await fetch('/finalizar-reserva', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(cartItems), // Envia os dados do carrinho
+                });
+
+                if (response.ok) {
+                    alert('Compra finalizada com sucesso!');
+                    window.location.href = '/'; // Redireciona para a página de compras concluídas
+                } else {
+                    alert('Erro ao finalizar a compra. Verifique e tente novamente.');
+                }
+            } catch (err) {
+                console.error('Erro ao finalizar a compra:', err);
+                alert('Erro inesperado. Tente novamente.');
+            }
         });
 
         // Calcula o total ao carregar a página

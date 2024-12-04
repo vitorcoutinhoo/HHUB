@@ -68,6 +68,11 @@ app.post('/login', (req, res) => {
             // Usuário autenticado, salvar dados na sessão
             req.session.userId = results[0].id_cliente;
             req.session.userName = results[0].user_name;
+            req.session.userEmail = results[0].email;
+
+            if(req.session.userName === 'ADM' && req.session.userEmail === 'adm@adm.com')
+                return res.redirect('/admin')
+
             return res.redirect('/');
         } else {
             return res.send('Credenciais inválidas');
@@ -158,6 +163,7 @@ app.get('/quarto/:id', (req, res) => {
 
     const query = `
         SELECT 
+            quarto.id_quarto,
             quarto.numeroQuarto, 
             quarto.tipoQuarto, 
             quarto.statusQuarto, 
@@ -173,13 +179,15 @@ app.get('/quarto/:id', (req, res) => {
         WHERE quarto.id_quarto = ?;
     `;
 
+
     db.query(query, [idQuarto], (err, results) => {
         if (err) {
             console.log('Erro ao consultar quarto:', err);
             return res.send('Erro ao acessar o banco de dados');
         }
         if (results.length > 0) {
-            res.render('quarto', { isLoggedIn, quarto: results[0] });
+            const quarto = results[0]
+            res.render('quarto', { isLoggedIn, quarto});
         } else {
             res.send('Quarto não encontrado');
         }
@@ -192,8 +200,7 @@ app.post('/carrinho', (req, res) => {
         return res.status(401).json({ message: 'É necessário estar logado para adicionar ao carrinho.' });
     }
 
-    const { id_Quarto, tipoQuarto, valor_quarto} = req.body;
-    console.log(id_Quarto, tipoQuarto, valor_quarto);
+    const { idQuarto, tipoQuarto, valor_quarto, idHotel} = req.body;
 
     // Inicializa o carrinho se ainda não existir
     if (!req.session.carrinho) {
@@ -201,26 +208,144 @@ app.post('/carrinho', (req, res) => {
     }
 
     // Adiciona o quarto ao carrinho
-    req.session.carrinho.push({ id_Quarto, tipoQuarto, valor_quarto});
-    console.log(req.session.carrinho);
+    req.session.carrinho.push({ idQuarto, tipoQuarto, valor_quarto, idHotel});
 
     res.status(200).json({ message: 'Quarto adicionado ao carrinho com sucesso!' });
 });
 
-app.delete('/carrinho/:index', (req, res) => {
-    const index = parseInt(req.params.index); // Obtém o índice da URL
+app.delete('/carrinho/:id', (req, res) => {
+    const id = req.params.id; // Obtém o ID do quarto a partir da URL
 
-    if (req.session.carrinho && req.session.carrinho[index]) {
-        req.session.carrinho.splice(index, 1); // Remove o item do carrinho
+    if (!req.session.carrinho || req.session.carrinho.length === 0) {
+        return res.status(404).json({ message: 'Carrinho vazio ou não inicializado' });
+    }
+
+    // Encontra o índice do item no carrinho
+    console.log(req.session.carrinho)
+    const itemIndex = req.session.carrinho.findIndex(item => item.idQuarto === id);
+    console.log(itemIndex)
+
+    if (itemIndex !== -1) {
+        // Remove o item do carrinho
+        req.session.carrinho.splice(itemIndex, 1);
         return res.status(200).json({ message: 'Item removido do carrinho' });
     } else {
         return res.status(404).json({ message: 'Item não encontrado no carrinho' });
     }
 });
 
-// Rota para admin (exemplo de outra página)
-app.get('/admin', (req, res) => {
-    res.render('admin');
+app.post('/finalizar-reserva', (req, res) => {
+    const carrinho = req.body; // Recebe o array com os itens do carrinho
+    const userId = req.session.userId;
+
+    if (!carrinho || carrinho.length === 0) {
+        return res.status(400).json({ message: 'Carrinho vazio.' });
+    }
+
+    // Query base para inserir os dados da reserva
+    const queryReserva = `
+        INSERT INTO RESERVA (fk_id_cliente, fk_id_quarto, dataCheckIn, dataCheckOut, statusReserva)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    // Query para atualizar o status do quarto
+    const queryQuarto = `
+        UPDATE QUARTO 
+        SET statusQuarto = 'Ocupado' 
+        WHERE id_quarto = ?
+    `;
+
+    // Inicia uma transação para garantir que todas as operações sejam feitas de forma segura
+    db.beginTransaction((err) => {
+        if (err) {
+            console.error('Erro ao iniciar transação:', err);
+            return res.status(500).json({ message: 'Erro ao processar sua compra.' });
+        }
+
+        // Itera pelos itens do carrinho e insere no banco e atualiza o status do quarto
+        carrinho.forEach(item => {
+            const dataCheckIn = new Date().toISOString().slice(0, 19).replace('T', ' '); // Formato YYYY-MM-DD HH:MM:SS
+            const dataCheckOut = new Date(Date.now() + item.days * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+
+            db.query(queryReserva, [userId, item.idQuarto, dataCheckIn, dataCheckOut, 'em Andamento'], (err) => {
+                if (err) {
+                    // Se ocorrer erro na inserção da reserva, desfaz a transação
+                    return db.rollback(() => {
+                        console.error('Erro ao salvar compra no banco:', err);
+                        res.status(500).json({ message: 'Erro ao processar sua compra.' });
+                    });
+                }
+
+                // Atualiza o status do quarto
+                db.query(queryQuarto, [item.idQuarto], (err) => {
+                    if (err) {
+                        // Se ocorrer erro ao atualizar o quarto, desfaz a transação
+                        return db.rollback(() => {
+                            console.error('Erro ao atualizar status do quarto:', err);
+                            res.status(500).json({ message: 'Erro ao processar sua compra.' });
+                        });
+                    }
+                });
+            });
+        });
+
+        // Se todas as operações forem bem-sucedidas, comita a transação
+        db.commit((err) => {
+            if (err) {
+                // Se ocorrer erro no commit, desfaz a transação
+                return db.rollback(() => {
+                    console.error('Erro ao finalizar transação:', err);
+                    res.status(500).json({ message: 'Erro ao processar sua compra.' });
+                });
+            }
+
+            // Retorna sucesso ao cliente
+            res.status(200).json({ message: 'Compra finalizada com sucesso!' });
+        });
+    });
+});
+
+app.get('/admin', async (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/login');
+    }
+
+    const query1 = 'SELECT * FROM QUARTO';
+    const query2 = 'SELECT *, nome_completo FROM RESERVA, CLIENTE WHERE id_cliente = fk_id_cliente';
+    
+    try {
+        // Realiza ambas as consultas de forma paralela
+        const [quartos, reservas] = await Promise.all([
+            new Promise((resolve, reject) => {
+                db.query(query1, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                db.query(query2, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            })
+        ]);
+
+        // Associa o número do quarto às reservas
+        const reservasComNumeroQuarto = reservas.map(reserva => {
+            // Encontra o quarto correspondente à reserva
+            const quarto = quartos.find(q => q.idQuarto === reserva.idQuarto);
+            return {
+                ...reserva,
+                numeroQuarto: quarto ? quarto.numeroQuarto : null, // Se encontrado, adiciona o número do quarto
+            };
+        });
+
+        // Renderiza a página com as reservas atualizadas
+        res.render('admin', { quartos, reservas: reservasComNumeroQuarto });
+    } catch (err) {
+        console.log('Erro ao consultar banco de dados:', err);
+        res.send('Erro ao acessar o banco de dados');
+    }
 });
 
 // Rota para promoções

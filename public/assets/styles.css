@@ -514,23 +514,23 @@ td {
     color: #495057;
 }
 
-.btn-update {
+.btn-add {
     background-color: #28a745;
     color: #ffffff;
     transition: background-color 0.3s;
 }
 
-.btn-update:hover {
+.btn-add:hover {
     background-color: #218838;
 }
 
-.btn-add {
+.btn-update {
     background-color: #007bff;
     color: #ffffff;
     transition: background-color 0.3s;
 }
 
-.btn-add:hover {
+.btn-update:hover {
     background-color: #0056b3;
 }
 
@@ -572,7 +572,7 @@ td {
 .display {
     max-width: 100%;
     display: flex;
-    gap: 150px;
+    gap: 100px;
     flex-direction: row;
     margin-left: auto;
     margin-right: auto;
